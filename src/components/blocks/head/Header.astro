@@ -1,18 +1,8 @@
 ---
-// Imports
 import { ClientRouter } from 'astro:transitions'
-import GoogleAnalytics from '../../scripts/googleAnalytics.astro'
-import GoogleTagManagerHead from '../../scripts/googleTagManagerHead.astro'
-import GoogleSearchConsole from '../../scripts/googleSearchConsole.astro'
-// Partials
 import Seo from './partials/Seo.astro'
-// Data
 import { configData } from '../../../config/config'
 
-import { googleAnalyticsMeasurementID } from '../../../config/analytics'
-import { googleTagManagerID } from '../../../config/analytics'
-
-// Props
 type Props = {
 	title?: string
 	description?: string
@@ -20,7 +10,7 @@ type Props = {
 	canonical?: boolean
 	noindex?: boolean
 }
-// Page Metadata
+
 const {
 	title = configData.siteTitle,
 	description = configData.siteDescription,
@@ -31,9 +21,6 @@ const {
 ---
 
 <head>
-	{googleAnalyticsMeasurementID && <GoogleAnalytics />}
-	{googleTagManagerID && <GoogleTagManagerHead />}
-	<GoogleSearchConsole />
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<Seo
@@ -46,6 +33,68 @@ const {
 	<link rel="icon" href={configData.logo.src} type="image/svg+xml" />
 	<link rel="sitemap" href="/sitemap-index.xml" />
 	<meta name="generator" content={Astro.generator} />
-	<meta name="theme-color" content="#134e4a" />
+	<meta name="theme-color" content="#0a0e0f" />
 	<ClientRouter fallback="swap" />
 </head>
+<script is:inline async defer>
+	document.addEventListener('astro:page-load', () => {
+		const menuItems = document.querySelectorAll('.header__menu-item')
+		menuItems.forEach((menuItem) => {
+			const submenu = menuItem.querySelector('.header__submenu')
+			const link = menuItem.querySelector('.header__menu-link')
+
+			if (submenu && link) {
+				link.addEventListener('click', function (event) {
+					event.preventDefault()
+					menuItem.classList.toggle('open')
+				})
+			}
+		})
+		document.addEventListener('click', function (event) {
+			const target = event.target
+
+			menuItems.forEach((menuItem) => {
+				const submenu = menuItem.querySelector('.header__submenu')
+				if (submenu && !menuItem.contains(target)) {
+					menuItem.classList.remove('open')
+				}
+			})
+		})
+
+		const headerToggle = document.querySelector('.header__toggle')
+		const headerMenu = document.querySelector('.header__menu')
+		if (headerToggle && headerMenu) {
+			headerToggle.addEventListener('click', () => {
+				headerToggle.classList.toggle('header__toggle--open')
+				const isExpanded = headerToggle.getAttribute('aria-expanded') === 'true'
+				headerToggle.setAttribute('aria-expanded', isExpanded ? 'false' : 'true')
+				headerMenu.classList.toggle('header__menu--open')
+			})
+		}
+	})
+</script>
+
+<script>
+	const initializeObserver = () => {
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach((entry) => {
+				if (entry.isIntersecting) {
+					entry.target.classList.add('scroll-animated')
+				}
+			})
+		})
+
+		const elements = document.querySelectorAll('.scroll-animation .col')
+		elements.forEach((element) => {
+			observer.observe(element)
+		})
+	}
+
+	document.addEventListener('DOMContentLoaded', initializeObserver)
+	document.addEventListener('astro:page-loaded', initializeObserver)
+	document.addEventListener('astro:after-swap', initializeObserver)
+</script>
+
+<script>
+	document.documentElement.classList.add('dark')
+</script>
