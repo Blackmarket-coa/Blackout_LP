@@ -1,50 +1,151 @@
 ---
-// Components
-// - Layout
 import Layout from '../layouts/Layout.astro'
-// - UI
-import Hero from '../components/blocks/hero/PageHeader.astro'
-import Price from '../components/blocks/pricing/PricingColumns.astro'
-import SocialProof from '../components/blocks/socialproof/Basic.astro'
-import FAQ from '../components/blocks/FAQ/Basic.astro'
-import Testimonial from '../components/blocks/testimonials/BasicDark.astro'
-import Feature from '../components/blocks/features/FeatureList.astro'
-import CTA from '../components/blocks/CTA/BasicDark.astro'
+import { addons, boostTiers, individualTiers, orgTiers } from '../data/pricing'
 
-// Content
-// - SEO
 const SEO = {
-	title: 'Foxi | Pricing made simple',
+	title: 'Blackout | Pricing',
 	description:
-		'Discover the perfect SaaS pricing plan for your business. From startups to enterprises, our scalable solutions offer unparalleled features and 24/7 support.'
+		'Straightforward pricing for individuals, organizations, and federated communities. Security is free forever.'
 }
-// - Page Header
-const header = {
-	title: 'Choose the plan that works for <strong>your</strong> needs',
-	text: 'All plans come with a 30-day money-back guarantee.'
-}
-// - Testimonial data
-import testimonialBackground from '../assets/testimonial-bg-02.webp'
-const testimonialData = {
-	blockquote:
-		"Foxi isn't just an app—it's like having a mischievous yet brilliant sidekick for your business. It streamlines tasks and also cracks jokes to keep spirits high",
-	figcaption: 'Max Widgetson',
-	cite: ' CEO, Widgetify Ltd'
-}
+
+const faqs = [
+	{
+		question: 'Is encryption really free?',
+		answer:
+			'Yes. End-to-end encryption is included on every plan, including Free. Privacy is baseline, not an upsell.'
+	},
+	{
+		question: 'What is steganography?',
+		answer:
+			'Steganography hides message payloads inside regular media, adding plausible deniability on top of encryption.'
+	},
+	{
+		question: 'Can I self-host?',
+		answer:
+			'Absolutely. You can self-host and still federate with the network. Your data, your server, your rules.'
+	},
+	{
+		question: 'How do Coalition Boosts work?',
+		answer:
+			'Boosts stack on top of organization plans and unlock relay, media, and community perks based on tier.'
+	},
+	{
+		question: 'What payment methods do you accept?',
+		answer: 'Major cards and invoicing for organizations. Additional rails are rolling out for coalition partners.'
+	},
+	{
+		question: 'How is this different from Discord?',
+		answer:
+			'Blackout is cooperative-first and privacy-first: E2EE by default, federation, and governance tools built in.'
+	},
+	{
+		question: 'How is this different from Signal?',
+		answer:
+			'Blackout combines encrypted messaging with community governance, federation sovereignty, and steg-native privacy.'
+	}
+]
 ---
 
 <Layout title={SEO.title} description={SEO.description}>
-	<Hero title={header.title} text={header.text} />
-	<Price />
-	<SocialProof />
-	<Feature />
-	<Testimonial
-		bg={testimonialBackground}
-		bgPosition="left"
-		blockquote={testimonialData.blockquote}
-		figcaption={testimonialData.figcaption}
-		cite={testimonialData.cite}
-	/>
-	<FAQ classes="bg-slate-50 dark:bg-neutral-900/40" />
-	<CTA />
+	<section class="container mx-auto px-6 py-16">
+		<h1 class="text-center">Pricing built for people, orgs, and federations</h1>
+		<p class="mx-auto max-w-3xl text-center text-neutral-300">
+			Security is a right, not a feature. E2EE, governance, and federation are free forever.
+		</p>
+	</section>
+
+	<section class="container mx-auto px-6 pb-14">
+		<h2 class="mb-6 text-3xl">Individual tiers</h2>
+		<div class="grid gap-5 lg:grid-cols-3">
+			{
+				individualTiers.map((tier) => (
+					<article class={`rounded-2xl border p-6 ${tier.featured ? 'border-primary-500/60' : 'border-[var(--bo-border)]'}`}>
+						<div class="mb-4 flex items-center justify-between">
+							<h3 class="mb-0 text-2xl">{tier.name}</h3>
+							{tier.badge && <span class="rounded-full bg-primary-500/10 px-3 py-1 text-xs tracking-wide text-primary-500">{tier.badge}</span>}
+						</div>
+						<p class="mb-2 text-3xl text-neutral-50">${tier.price}<span class="text-base text-neutral-400"> / {tier.unit}</span></p>
+						<p class="text-neutral-300">{tier.description}</p>
+						<ul class="mt-4 space-y-2 text-sm">
+							{tier.features.map((feature) => <li class={`${feature.included ? 'text-neutral-200' : 'text-neutral-500 line-through'} ${feature.highlight ? 'font-medium text-primary-500' : ''}`}>{feature.name}</li>)}
+						</ul>
+					</article>
+				))
+			}
+		</div>
+	</section>
+
+	<section class="container mx-auto px-6 pb-14">
+		<h2 class="mb-6 text-3xl">Organization tiers</h2>
+		<div class="grid gap-5 lg:grid-cols-3">
+			{
+				orgTiers.map((tier) => (
+					<article class={`rounded-2xl border p-6 ${tier.featured ? 'border-primary-500/60' : 'border-[var(--bo-border)]'}`}>
+						<div class="mb-4 flex items-center justify-between">
+							<h3 class="mb-0 text-2xl">{tier.name}</h3>
+							{tier.badge && <span class="rounded-full bg-primary-500/10 px-3 py-1 text-xs tracking-wide text-primary-500">{tier.badge}</span>}
+						</div>
+						<p class="mb-2 text-3xl text-neutral-50">${tier.price}<span class="text-base text-neutral-400"> / {tier.unit}</span></p>
+						<p class="text-neutral-300">{tier.description}</p>
+						<ul class="mt-4 space-y-2 text-sm">
+							{tier.features.map((feature) => <li class={`${feature.included ? 'text-neutral-200' : 'text-neutral-500 line-through'} ${feature.highlight ? 'font-medium text-primary-500' : ''}`}>{feature.name}</li>)}
+						</ul>
+					</article>
+				))
+			}
+		</div>
+	</section>
+
+	<section class="container mx-auto px-6 pb-14">
+		<div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+			<h2 class="mb-0 text-3xl">Coalition Boosts</h2>
+			<p class="mb-0 text-primary-500">$3.99/boost ($3.49 with Signal)</p>
+		</div>
+		<div class="grid gap-5 lg:grid-cols-3">
+			{boostTiers.map((tier) => (
+				<article class="rounded-2xl border border-[var(--bo-border)] p-6">
+					<h3 class="mb-1 text-xl">{tier.name}</h3>
+					<p class="mb-3 text-neutral-300">{tier.boosts} boosts</p>
+					<p class="mb-0 text-neutral-200">{tier.features}</p>
+				</article>
+			))}
+		</div>
+	</section>
+
+	<section class="container mx-auto px-6 pb-14">
+		<h2 class="mb-6 text-3xl">Add-ons and ecosystem</h2>
+		<div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+			{addons.map((addon) => (
+				<article class="rounded-2xl border border-[var(--bo-border)] p-6">
+					<h3 class="mb-1 text-xl">{addon.name}</h3>
+					<p class="mb-3 font-medium text-[var(--bo-teal)]">{addon.price}</p>
+					<p class="mb-0 text-neutral-300">{addon.description}</p>
+				</article>
+			))}
+		</div>
+	</section>
+
+	<section class="container mx-auto px-6 pb-14">
+		<h2 class="mb-6 text-3xl">Storage comparison</h2>
+		<div class="overflow-hidden rounded-2xl border border-[var(--bo-border)]">
+			<div class="grid grid-cols-[1fr_10fr_50fr_200fr] text-xs font-medium md:text-sm">
+				<div class="bg-neutral-700 px-2 py-5 text-center">Free 1GB</div>
+				<div class="bg-[var(--bo-teal)] px-2 py-5 text-center text-neutral-900">Signal 10GB</div>
+				<div class="bg-primary-500 px-2 py-5 text-center text-neutral-900">Signal+ 50GB</div>
+				<div class="bg-[var(--bo-amber)] px-2 py-5 text-center text-neutral-900">Federation 200GB</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="container mx-auto px-6 pb-20">
+		<h2 class="mb-6 text-3xl">FAQ</h2>
+		<div class="space-y-3">
+			{faqs.map((faq) => (
+				<details class="rounded-xl border border-[var(--bo-border)] bg-neutral-800/50 p-4">
+					<summary class="cursor-pointer list-none text-lg font-medium text-neutral-100">{faq.question}</summary>
+					<p class="mb-0 mt-3 text-neutral-300">{faq.answer}</p>
+				</details>
+			))}
+		</div>
+	</section>
 </Layout>

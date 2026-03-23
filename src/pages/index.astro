@@ -1,29 +1,116 @@
 ---
-// Components
-// - Layout
 import Layout from '../layouts/Layout.astro'
-// - UI
-import Hero from '../components/blocks/hero/HomeCTA.astro'
-import Features from '../components/blocks/features/FeatureCards.astro'
-import Testimonial from '../components/blocks/testimonials/BasicDark.astro'
-import HighlightBlocks from '../components/blocks/highlights/HightlightRows.astro'
-import CTA from '../components/blocks/CTA/BasicDark.astro'
+import { features } from '../data/features'
 
-// Content
-// - Testimonial background
-import testimonialBackground from '../assets/testimonial-bg-01.webp'
-// - SEO
 const SEO = {
-	title: 'Foxi | Your Productivity Toolkit',
+	title: 'Blackout | Communication that stays yours',
 	description:
-		'Foxi is a powerful productivity toolkit designed to enhance your workflow and boost your productivity. With features like analytics, security, and integrations, Foxi is the perfect solution for your business.'
+		'End-to-end encrypted messaging, cooperative governance, and steganographic privacy. No ads. No tracking. No compromise.'
+}
+
+const softwareSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'SoftwareApplication',
+	name: 'Blackout',
+	applicationCategory: 'CommunicationApplication',
+	operatingSystem: 'macOS, Windows, Linux, iOS, Android, Web',
+	description: SEO.description,
+	offers: {
+		'@type': 'Offer',
+		price: '0',
+		priceCurrency: 'USD'
+	}
 }
 ---
 
 <Layout title={SEO.title} description={SEO.description}>
-	<Hero />
-	<Features />
-	<Testimonial bg={testimonialBackground} bgPosition="right" />
-	<HighlightBlocks />
-	<CTA />
+	<section class="container mx-auto px-6 py-20 lg:py-28">
+		<div class="mx-auto max-w-4xl text-center">
+			<div class="mx-auto mb-8 flex h-12 w-12 items-center justify-center rounded-full border border-primary-500">
+				<div class="h-2.5 w-2.5 rounded-full bg-primary-500"></div>
+			</div>
+			<h1>Communication that <strong>stays yours</strong></h1>
+			<p class="mx-auto max-w-2xl text-lg text-neutral-200">
+				End-to-end encrypted messaging, cooperative governance, and steganographic privacy. No ads.
+				No tracking. No compromise.
+			</p>
+			<div class="mt-8 flex flex-wrap justify-center gap-3">
+				<a href="#download" class="rounded-lg bg-primary-500 px-6 py-3 font-medium text-neutral-900">Download</a>
+				<a
+					href="https://app.blackout.coop"
+					target="_blank"
+					rel="noreferrer"
+					class="rounded-lg border border-[var(--bo-border-hi)] px-6 py-3 font-medium text-neutral-50"
+				>
+					Open in browser
+				</a>
+			</div>
+			<ul class="mt-6 flex flex-wrap justify-center gap-3 text-sm text-neutral-300">
+				<li class="rounded-full border border-[var(--bo-border)] px-3 py-1">Open source</li>
+				<li class="rounded-full border border-[var(--bo-border)] px-3 py-1">Self-hostable</li>
+				<li class="rounded-full border border-[var(--bo-border)] px-3 py-1">Zero knowledge</li>
+			</ul>
+		</div>
+	</section>
+
+	<section class="container mx-auto px-6 pb-10">
+		<div class="grid gap-4 md:grid-cols-2">
+			{
+				features.map((feature) => (
+					<article class="rounded-2xl border border-[var(--bo-border)] bg-neutral-800/60 p-6">
+						<p class="mb-3 text-[14px] font-medium tracking-[0.1em] text-primary-500">{feature.code}</p>
+						<h3 class="mb-3 text-2xl">{feature.title}</h3>
+						<p class="text-neutral-300">{feature.description}</p>
+					</article>
+				))
+			}
+		</div>
+	</section>
+
+	<section class="container mx-auto px-6 py-16">
+		<div class="rounded-2xl border border-[var(--bo-border)] bg-neutral-800/60 p-8">
+			<div class="mb-6 flex items-end justify-between gap-6">
+				<h2 class="mb-0 text-3xl">Free vs Signal</h2>
+				<a href="/pricing" class="text-sm font-medium text-primary-500">See all plans →</a>
+			</div>
+			<div class="grid gap-6 md:grid-cols-2">
+				<div class="rounded-xl border border-[var(--bo-border)] p-5">
+					<h3 class="mb-2 text-xl">Free — $0 forever</h3>
+					<ul class="space-y-2 text-neutral-300">
+						<li>Full E2EE messaging and calling</li>
+						<li>Built-in cooperative governance</li>
+						<li>Federation enabled</li>
+						<li>Basic steganography (LSB)</li>
+						<li>1 GB encrypted storage</li>
+					</ul>
+				</div>
+				<div class="rounded-xl border border-primary-500/40 p-5">
+					<h3 class="mb-2 text-xl">Signal — $4.99/mo</h3>
+					<ul class="space-y-2 text-neutral-300">
+						<li>Advanced steg: DCT, audio, batch</li>
+						<li>Priority relay routing</li>
+						<li>10 GB encrypted storage</li>
+						<li>Animated avatar + identity badge</li>
+						<li>Boost discounts for communities</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section id="download" class="container mx-auto px-6 pb-20">
+		<h2 class="text-center">Downloads</h2>
+		<div class="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+			{
+				['macOS', 'Windows', 'Linux', 'iOS', 'Android'].map((platform) => (
+					<a href="#" class="rounded-xl border border-[var(--bo-border)] bg-neutral-800/60 p-4 min-h-11">
+						<p class="mb-1 text-xs uppercase tracking-wide text-neutral-400">Download for</p>
+						<p class="mb-0 text-lg text-neutral-50">{platform}</p>
+					</a>
+				))
+			}
+		</div>
+	</section>
+
+	<script is:inline type="application/ld+json" set:html={JSON.stringify(softwareSchema)}></script>
 </Layout>
